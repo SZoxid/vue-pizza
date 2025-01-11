@@ -54,29 +54,64 @@
     </nav>
     <main class="w-[90%] m-auto mt-[32px] border border-yellow-500">
       <h2>Все пиццы</h2>
-      <div class="flex justify-between mt-[35px]">
-        <div class="w-[280px] h-[459px] border"></div>
-        <div class="w-[280px] h-[459px] border"></div>
-        <div class="w-[280px] h-[459px] border"></div>
-        <div class="w-[280px] h-[459px] border"></div>
+      <div class="flex grid grid-cols-4 gap-[27px] mt-[35px]">
+        <div
+          class="w-[280px] h-[459px] border"
+          v-for="pizza in pizzas"
+          :key="pizza.id"
+        >
+          <img
+            src="../public/vue-pizza.png"
+            :alt="pizza.name"
+            class="w-[259px] h-[260px] m-auto"
+          />
+          <h3 class="text-center mt-[11px]">{{ pizza.name }}</h3>
+          <div
+            class="w-[280px] h-[85px] flex flex-col mt-[22px] bg-[#F3F3F3] rounded-[10px]"
+          >
+            <div class="w-[265px] m-auto flex justify-between">
+              <button>тонкое</button>
+              <button>традиционное</button>
+            </div>
+            <div class="w-[265px] m-auto flex justify-between">
+              <button class="gap-4" v-for="size in pizza.sizes" :key="size">
+                {{ size }} см.
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-between mt-[17px]">
+            <p>от {{ pizza.price }} ₽</p>
+            <button class="flex">
+              <span>+</span>
+              <span>Добавить </span>
+              <span>2</span>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="flex justify-between mt-[65px]">
-        <div class="w-[280px] h-[459px] border"></div>
-        <div class="w-[280px] h-[459px] border"></div>
-        <div class="w-[280px] h-[459px] border"></div>
-        <div class="w-[280px] h-[459px] border"></div>
-      </div>
-      <div class="flex justify-between mt-[65px]">
-        <div class="w-[280px] h-[459px] border"></div>
-        <div class="w-[280px] h-[459px] border"></div>
-        <div class="w-[280px] h-[459px] border"></div>
-        <div class="w-[280px] h-[459px] border"></div>
-      </div>
-
     </main>
     <footer></footer>
   </div>
 </template>
 
-<script setup></script>
+<script>
+export default {
+  data() {
+    return {
+      pizzas: [],
+    };
+  },
+  mounted() {
+    fetch("http://localhost:5000/pizzas")
+      .then((response) => response.json())
+      .then((data) => {
+        this.pizzas = data;
+      })
+      .catch((error) => {
+        console.error("Ошибка загрузки данных:", error);
+      });
+  },
+};
+</script>
+
 <style scoped></style>
